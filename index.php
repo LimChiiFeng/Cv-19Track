@@ -644,7 +644,7 @@ elseif(isset($_POST['register']))
 
 							<div class="form-group">
 								<input type="password" name="passwordCfm" id="passwordCfm" class="form-control" placeholder="Password Confirm">
-								<span class = "invalid-feedback" id = "pssCfmError"> *The password is not same </span>
+								<span class = "invalid-feedback" id = "pssCfmError"> *The password is not match. </span>
 							</div>
 
 								<div class="text-center pt-2 pb-1">

@@ -67,7 +67,7 @@ if(isset($_POST['createCentre'])){
 
 //if officer don't have centre, hide the manage and view tester link
 if($centreNum==0){
-	echo "<style> #function{display:none;} </style>";
+	echo "<style> #function, #centreInformation{display:none;} </style>";
 }
 else if($centreNum==1){
     echo "<style> #addNewCentre{display:none;} </style>";
@@ -184,7 +184,7 @@ else if($centreNum==1){
             <div class = "addCentre col-md-6">
                 <button class = "btn btn-outline" data-toggle="modal" data-target="#newCentre" id="addNewCentre"> + New Test Centre</button>
             </div>
-            <table class = "table">
+            <table class = "table" id="centreInformation">
                 <tr>
                     <div>
                         <!-- <td class="col-md-3">
@@ -197,8 +197,8 @@ else if($centreNum==1){
                             </div>
                             <div class="description">
                                 <ul style="list-style:none; margin-left:-4rem;">
-                                    <li class="list-item">Number of Tester: ?? <a class="btn btn-link" href=""> View </a> </li>
-                                    <li class="list-item">Kit Stock: ?? <a class="btn btn-link" href="kitStock"> Manage </a></li>
+                                    <li class="list-item">Number of Tester: ?? <a class="btn btn-link" href="viewTester.php"> View </a> </li>
+                                    <li class="list-item">Kit Stock: ?? <a class="btn btn-link" href="kitStock.php"> Manage </a></li>
                                 </ul>
                                 <!-- The number of tester will be increase and automatically count when a tester is recorded to this test centre -->
                                 <!-- There are two way to show the tester information, 1. click the view button 2. click the view tester link in the navigation -->

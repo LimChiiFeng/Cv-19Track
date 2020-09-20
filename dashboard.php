@@ -22,7 +22,7 @@ if(!isset($_SESSION['username'])){
 	}
 
 if($centreNum==0){
-	echo "<style> #function, #report{display:none;} </style>";
+	echo "<style> .function{display:none;} </style>";
 }
 ?>
 
@@ -92,7 +92,7 @@ if($centreNum==0){
 									<div id="colorlib-logo"><a href="index.html">Cv-19<span>Track</span></a></div>
 								</div>
 								<div class="col-md-2">
-									<span> <?php echo "$username"; ?> <span>
+									<span> <?php echo "$username,$centreNum"; ?> <span>
 								</div>
 							</div>
 						</div>
@@ -105,13 +105,13 @@ if($centreNum==0){
 						<div class="col-md-8">
 							<div class="menu-1">
 								<ul>
-									<li class="nav-item active" ><a href="dashboard.html">Dashboard</a></li>
+									<li class="nav-item active" ><a href="dashboard.php">Dashboard</a></li>
 									<li><a href="testCentre.php">Test Centre</a></li>
-									<li class="nav-item" id="function">
-										<a href="viewTester" >View Tester</a>
+									<li class="nav-item">
+										<a class="function" href="viewTester" >View Tester</a>
 									</li>
-									<li class="nav-item" id="function"><a href="kitStock">Kit Stock</a></li>
-									<li class="nav-item" id="function"><a href="report">Report</a></li>
+									<li class="nav-item"><a class="function" href="kitStock.php">Kit Stock</a></li>
+									<li class="nav-item"><a class="function" href="report.php">Report</a></li>
 								</ul>
 							</div>
 						</div>
