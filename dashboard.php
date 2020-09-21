@@ -108,7 +108,7 @@ if($centreNum==0){
 									<li class="nav-item active" ><a href="dashboard.php">Dashboard</a></li>
 									<li><a href="testCentre.php">Test Centre</a></li>
 									<li class="nav-item">
-										<a class="function" href="viewTester" >View Tester</a>
+										<a class="function" href="viewTester.php" >View Tester</a>
 									</li>
 									<li class="nav-item"><a class="function" href="kitStock.php">Kit Stock</a></li>
 									<li class="nav-item"><a class="function" href="report.php">Report</a></li>
