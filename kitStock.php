@@ -2,6 +2,9 @@
 include("dbcon.php");
 session_start();
 
+$centreNum = 0;
+$centreName = "";
+$centreID = "";
 //check user
 if(!isset($_SESSION['username'])){
 	echo "<script>alert('Please login first!')</script>";
@@ -20,22 +23,60 @@ if(!isset($_SESSION['username'])){
         $statement2 = $dbcon->prepare($findCentre);
         $statement2->execute();
         if($row2=$statement2->fetch()){
-            $centreName = $row2['centreName'];
+			$centreName = $row2['centreName'];
+			$centreID=$row['centreID'];
         }else{
             echo "<script> alert('Fail Centre Name!'); </script>";
         }
 	}
 }
 
+//add new test kit
+if(isset($_POST['createKit'])){
+	$testName=$_POST['testName'];
+	$stockNum=(int)$_POST['stockNum'];
+
+	$check_kit="select * from testKit where testName='$testName' AND centreID='$centreID'";
+	$statement = $dbcon->prepare($check_kit);
+	$statement->execute();
+	if($row = $statement->fetch()){
+		echo "<script> alert('Test Kit exist!'); </script>";
+	}
+	else{
+		$insert_kit="insert into `testKit` (`testName`,`availableStock`,`centreID`) values ('$testName',$stockNum,$centreID)";
+		$statement2 = $dbcon->prepare($insert_kit);
+		if($statement2->execute()){
+			echo "<script> alert('Test Kit has been added!'); </script>";
+		}
+	} 
+} 
+else if(isset($_POST['updateStock'])){
+	$kitID = $_POST['kID'];
+	$testName = $_POST['tname'];
+	$stockNo = (int)$_POST['stockNo'];
+	
+	$update_stock = "update `testkit` SET `availableStock`= availableStock + $stockNo where kitID = '$kitID'";
+	$statement = $dbcon->prepare($update_stock);
+
+	if($statement->execute()){
+		echo "<script> alert('$testName\'s stock update successfully!'); </script>";
+	} else {
+		echo "<script> alert('Stock Update failed!'); </script>";
+	}
+} 
+
+
+
 //if officer don't have centre, hide the manage and view tester link
-if($centreNum==0){
-	echo "<style> #function{display:none;} </style>";
-}
-else if($centreNum==1){
-    echo "<style> #addNewCentre{display:none;} </style>";
-}
+// if($centreNum==0){
+// 	echo "<style> #function, #centreInformation{display:none;} </style>";
+// }
+// else if($centreNum==1){
+//     echo "<style> #addNewCentre{display:none;} </style>";
+// }
 
 ?>
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -101,8 +142,8 @@ else if($centreNum==1){
 								<div class="col-md-6">
 									<div id="colorlib-logo"><a href="index.html">Cv-19<span>Track</span></a></div>
 								</div>
-								<div class="col-md-2">
-									<span> <?php echo "$username, $centreNum, $centreName"; ?> <span>
+								<div class="col-md-5">
+									<span> <?php echo "$username, $centreNum, $centreName,$centreID"; ?> <span>
 								</div>
 							</div>
 						</div>
@@ -120,8 +161,8 @@ else if($centreNum==1){
 									<li class="nav-item" id="function">
 										<a href="viewTester.php" >View Tester</a>
 									</li>
-									<li class="nav-item active" id="function"><a href="kitStock">Kit Stock</a></li>
-									<li class="nav-item" id="function"><a href="report">Report</a></li>
+									<li class="nav-item active" id="function"><a href="kitStock.php">Kit Stock</a></li>
+									<li class="nav-item" id="function"><a href="report.php">Report</a></li>
 								</ul>
 							</div>
 						</div>
@@ -141,58 +182,97 @@ else if($centreNum==1){
 		</div>
 	</nav>
     
-    <div class="viewCentre">
-        <div class = "container">
-            <div class = "addCentre col-md-6">
-                <button class = "btn btn-outline" data-toggle="modal" data-target="#newCentre" id="addNewCentre"> + New Test Centre</button>
-            </div>
-            <table class = "table">
-                <tr>
-                    <div>
-                        <!-- <td class="col-md-3">
-                            <span>Image</span>
-                            <img src="images/aaa.jpg">
-                        </td> -->
-                        <td class="col-md-9">
-                            <div>
-                                <h3><?php echo $centreName ?></h3>
-                            </div>
-                            <div class="description">
-                                <ul style="list-style:none; margin-left:-4rem;">
-                                    <li class="list-item">Number of Tester: ?? <a class="btn btn-link" href=""> View </a> </li>
-                                    <li class="list-item">Kit Stock: ?? <a class="btn btn-link" href="kitStock"> Manage </a></li>
-                                </ul>
-                                <!-- The number of tester will be increase and automatically count when a tester is recorded to this test centre -->
-                                <!-- There are two way to show the tester information, 1. click the view button 2. click the view tester link in the navigation -->
-                                <!-- In the view tester page, it show the list of the tester and able to add/records a new tester -->
-                                <!-- When manager record a new tester, the username would be assinged to the centreID -->
-                            </div>
-                        </td>
-                    </div>
-                </tr>
-            </table>
-        </div>
-    </div>
+    <div class="testKit">
+		<div class="container">
+			<div class="table-top col-md-6">
+				<button class="btn btn-outline" data-toggle="modal" data-target="#newKit" id="addNewKit"> + Add Test Kit </button>
+			</div>
 
-    <div class="addCentre">
+			<table class="table table-hover" id="testKitData">
+				<tr class="thead">
+					<th class='table_testName'> Test name  </th>
+					<th class='table_stock'> Stock </th>
+				</tr>
+				
+				<?php
+					$kit_data="select * from testKit where centreID='$centreID'";
+					$statement = $dbcon->prepare($kit_data);
+					$statement->execute();
+					$data = $statement->fetchAll();
+					foreach($data as $row) {
+						$kitID = $row['kitID'];
+						$testName = $row['testName'];
+						$availableStock = $row['availableStock'];
+				?>
+				
+				<tr>
+					<td class='table_testName'> <?php echo $testName ?> </td>
+					<td class='table_stock'> <?php echo $availableStock ?> 
+					<button class='btn btn-link' data-toggle='modal' data-target='#addStock<?php echo $kitID?>'> Add </button>
+					</td> 
+				</tr>
+
+				<div class="modal fade" id="addStock<?php echo $kitID ?>">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h2 class="modal-title">Adding Stock</h2>
+								<button class="close" data-dismiss="modal">&times;</button>
+							</div>
+							<div class = "modal-body">
+								<form role="form" method="post" action="kitStock.php" id="stockForm<?php echo $testName; ?>" name="stockForm" onsubmit="return addStockForm(this.id);">
+									<div class="form-group">
+										<!-- <label>Test Name</label> -->
+										<h3> <?php echo $testName ?> </h3>
+										<input type = "text" name="kID" id="kID" value="<?php echo $kitID ?>" hidden>
+										<input type = "text" name="tname" id="tname" value="<?php echo $testName ?>" hidden>
+
+									</div>
+									<div class="form-group">
+										<label>Stock Number</label>
+										<input type="number" name="stockNo" class="form-control" id="stockNo" min="0" value="0"> 
+										<span class = "invalid-feedback" id = "stockNoErr_stockForm<?php echo $testName; ?>"> *Must be greater than or equal to 1.</span>
+									</div>
+
+									<div class="text-center pt-4">
+										<button type="submit"  value="updateStock" name="updateStock" class="btn btn-success btn-block">Confirm</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<?php } ?>			
+			</table>
+		</div>
+					
+	</div>
+
+    <div class="addKit">
 		<div class = "container">
-			<div class="modal fade" id="newCentre">
+			<div class="modal fade" id="newKit">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h2 class="modal-title">Add New Centre</h2>
+							<h2 class="modal-title">Add New Test Kit</h2>
 							<button class="close" data-dismiss="modal">&times;</button>
 						</div>
 						<div class = "modal-body">
-							<form role="form" method="post" action="testCentre.php" name="newCentreForm" onsubmit="return addCentreForm(this);">
+							<form role="form" method="post" action="kitStock.php" name="newKitForm" onsubmit="return addKitForm(this);">
 								<div class="form-group">
-                                    <label>Centre Name</label>
-                                    <input type="text" name="centreName" class="form-control" id="centreName" autofocus>
-                                    <span class = "invalid-feedback" id = "centreNameError"> *Please enter a centre name.</span>
-                                </div>
+                                    <label>Test Name</label>
+                                    <input type="text" name="testName" class="form-control" id="testName" autofocus>
+                                    <span class = "invalid-feedback" id = "testNameError"> *Please enter a test name.</span>
+								</div>
+								<div class="form-group">
+									<label>Stock Number</label>
+									<input type="number" name="stockNum" class="form-control" id="stockNum" min="0" value="0"> 
+									<span class = "invalid-feedback" id = "stockNumError"> *Must be greater than or equal to 1.</span>
+								</div>
 
 								<div class="text-center pt-4">
-								    <button type="submit" value="createCentre" name="createCentre" class="btn btn-success btn-block">Submit</button>
+								    <button type="submit" value="createKit" name="createKit" class="btn btn-success btn-block">Submit</button>
 								</div>
 							  </form>
 						</div>
@@ -201,6 +281,65 @@ else if($centreNum==1){
 			</div>
 		</div>
 	</div>
+
+	<script>
+    function addKitForm()
+		{
+			var testName=document.newKitForm.testName;
+			var stockNum=document.newKitForm.stockNum;
+
+			var errorMsg = 0;
+
+			if(testName.value == "") {
+                document.getElementById('testNameError').style.display = 'block';
+                return false;
+				errorMsg++;
+            } else {
+				document.getElementById('testNameError').style.display = 'none';
+			}
+
+			if(stockNum.value =="" ) {
+				document.getElementById('stockNumError').style.display = 'block';
+				return false;
+				errorMsg++;
+			} else if (stockNum.value < 1){
+				document.getElementById('stockNumError').style.display = 'block';
+				return false;
+			} else {
+				document.getElementById('stockNumError').style.display = 'none';
+			}
+
+			if(errorMsg != 0){
+				if(testName.value == "") {
+					testName.focus();
+				} else if(stockNum.value =="" || stockNum.value < 1) {
+					stockNum.focus();
+				} 
+				return false;
+			} 
+		}
+
+		function addStockForm(stockFormID)
+		{
+			var stockNo=document.getElementById(stockFormID).elements['stockNo'];
+
+
+			if(stockNo.value =="" ) {
+				document.getElementById('stockNoErr_'+stockFormID).style.display = 'block';
+				return false;
+				
+			} else if (stockNo.value < 1){
+				document.getElementById('stockNoErr_'+stockFormID).style.display = 'block';
+				return false;
+			} else {
+				document.getElementById('stockNoErr_'+stockFormID).style.display = 'none';
+			}
+
+			// alert('this is id'+stockFormID);
+		}
+    
+	
+	</script>
 
 	<footer id="colorlib-footer" role="contentinfo">
 		<div class="row copyright">
@@ -220,19 +359,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
     <script>
-    function addCentreForm()
-		{
-			var centreName=document.newCentreForm.centreName;
-
-			if(centreName.value == "") {
-                document.getElementById('centreNameError').style.display = 'block';
-                return false;
-            }
-            // else if (centreName.value== checkName){
-			// 	document.getElementById("centreNameError").innerHTML="Centre Name exist!";
-			// 	return false;
-			// }
-		}
     </script>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
