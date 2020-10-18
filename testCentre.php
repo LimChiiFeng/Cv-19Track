@@ -4,6 +4,8 @@ session_start();
 
 $centreNum = 0;
 $centreName = "";
+$count_kitstock = 0;
+$count_tester = 0;
 
 //check user
 if(!isset($_SESSION['username'])){
@@ -17,16 +19,38 @@ if(!isset($_SESSION['username'])){
 	$statement->execute();
 	if($row = $statement->fetch()){
         $centreNum++;
-
-        $centreID = $row['centreID'];
+		$centreID = $row['centreID'];
+		
         $findCentre = "select * from testCentre where centreID = $centreID";
         $statement2 = $dbcon->prepare($findCentre);
         $statement2->execute();
         if($row2=$statement2->fetch()){
-            $centreName = $row2['centreName'];
+			$centreName = $row2['centreName'];
         }else{
             echo "<script> alert('Fail Centre Name!'); </script>";
-        }
+		}
+		
+		//to calculate total kit stock
+		$sum_kit = "select count(kitID) as totalKit from testKit where centreID = '$centreID'";
+		$statement3 = $dbcon->prepare($sum_kit);
+		$statement3->execute();
+		if($row3=$statement3->fetch()){
+			$count_kitstock  = $row3['totalKit'];
+		}
+		else{
+			echo "<script> alert('Available Stock calculate fail!!'); </script>";
+		}
+
+		//to calculate total number of tester
+		$sum_tester = "select count(username) from user where centreID = '$centreID' AND position = 'Tester'";
+		$statement4 = $dbcon->prepare($sum_tester);
+		$statement4->execute();
+		if($row4=$statement4->fetch()){
+			$count_tester  = $row4['count(username)'];
+		}
+		else{
+			echo "<script> alert('Tester number calculate fail!!'); </script>";
+		}
 	}
 }
 
@@ -140,7 +164,7 @@ else if($centreNum==1){
 									<div id="colorlib-logo"><a href="index.html">Cv-19<span>Track</span></a></div>
 								</div>
 								<div class="col-md-2">
-									<span> <?php echo "$username, $centreNum, $centreName"; ?> <span>
+									<span> <?php echo "$username, $centreNum, $centreName,$count_kitstock,$count_tester"; ?> <span>
 								</div>
 							</div>
 						</div>
@@ -156,10 +180,10 @@ else if($centreNum==1){
 									<li class="nav-item" ><a href="dashboard.php">Dashboard</a></li>
 									<li class="nav-item active"><a href="testCentre.php">Test Centre</a></li>
 									<li class="nav-item" id="function">
-										<a href="#" >View Tester</a>
+										<a href="viewTester.php" >View Tester</a>
 									</li>
-									<li class="nav-item" id="function"><a href="#">Kit Stock</a></li>
-									<li class="nav-item" id="function"><a href="#">Report</a></li>
+									<li class="nav-item" id="function"><a href="kitStock.php">Kit Stock</a></li>
+									<li class="nav-item" id="function"><a href="report.php">Report</a></li>
 								</ul>
 							</div>
 						</div>
@@ -197,8 +221,8 @@ else if($centreNum==1){
                             </div>
                             <div class="description">
                                 <ul style="list-style:none; margin-left:-4rem;">
-                                    <li class="list-item">Number of Tester: ?? <a class="btn btn-link" href="viewTester.php"> View </a> </li>
-                                    <li class="list-item">Kit Stock: ?? <a class="btn btn-link" href="kitStock.php"> Manage </a></li>
+                                    <li class="list-item">Number of Tester: <?php echo $count_tester ?> <a class="btn btn-link" href="viewTester.php"> View </a> </li>
+                                    <li class="list-item">Total Kit Stock: <?php echo $count_kitstock ?> <a class="btn btn-link" href="kitStock.php"> Details </a></li>
                                 </ul>
                                 <!-- The number of tester will be increase and automatically count when a tester is recorded to this test centre -->
                                 <!-- There are two way to show the tester information, 1. click the view button 2. click the view tester link in the navigation -->

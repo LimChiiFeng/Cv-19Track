@@ -161,7 +161,7 @@ elseif(isset($_POST['register']))
 						<div class = "col-md-4">
 							<div class="menu-2">
 								<button class = "btn btn-link" data-toggle="modal" data-target="#signIn">Sign In</button>
-								<button class = "btn btn-link" data-toggle="modal" data-target="#signUp">Sign Up</button>
+								<!-- <button class = "btn btn-link" data-toggle="modal" data-target="#signUp">Sign Up</button> -->
 							</div>
 							
 						</div>
@@ -602,7 +602,7 @@ elseif(isset($_POST['register']))
 								</div>				
 							  </form>
 							  <div class="text-center">
-								<span>Don't have an account?<button class="btn btn-link">Sign Up now!</button></span>
+								<!-- <span>Don't have an account?<button class="btn btn-link">Sign Up now!</button></span> -->
 							</div>
 						</div>
 					</div>

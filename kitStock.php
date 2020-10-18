@@ -207,8 +207,7 @@ else if(isset($_POST['updateStock'])){
 				
 				<tr>
 					<td class='table_testName'> <?php echo $testName ?> </td>
-					<td class='table_stock'> <?php echo $availableStock ?> 
-					<button class='btn btn-link' data-toggle='modal' data-target='#addStock<?php echo $kitID?>'> Add </button>
+					<td class='table_stock'> <?php echo $availableStock ?><button class='btn btn-link' data-toggle='modal' data-target='#addStock<?php echo $kitID?>'> Add </button>
 					</td> 
 				</tr>
 
