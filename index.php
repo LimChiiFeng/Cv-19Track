@@ -17,6 +17,8 @@ if(isset($_POST['login']))
 		if(password_verify($password, $hashed_password)) {
 			$_SESSION['username']=$row['username'];
 			$_SESSION['type']=$row['type'];
+			$_SESSION['position']=$row['position'];
+			$_SESSION['name']=$row['name'];
 			if($_SESSION['type'] == "centreOfficer"){
 				echo "<script>window.open('dashboard.php','_self')</script>";
 			}else if($_SESSION['type'] == "patient"){
@@ -40,7 +42,6 @@ elseif(isset($_POST['register']))
 	$username=$_POST['username'];
 	$password=$_POST['password'];
 	$fullName=$_POST['fullName'];
-	$email=$_POST['email'];
 	
 	$find_user="select * from user where username='$username'"; 
 	$statement = $dbcon->prepare($find_user);
@@ -53,8 +54,8 @@ elseif(isset($_POST['register']))
 	{
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		
-		$query = "insert into user (username, password, name, email, type, patientType, symptoms, position) 
-				  values ('$username','$hashed_password','$fullName','$email','patient','returnee','None', null)";
+		$query = "insert into user (username, password, name, type, position) 
+				  values ('$username','$hashed_password','$fullName','centreOfficer','Manager')";
 		$statement = $dbcon->prepare($query);
 		if($statement->execute())
 		{
@@ -633,11 +634,6 @@ elseif(isset($_POST['register']))
 							</div>
 
 							<div class="form-group">
-								<input type="text" name="email" id="email" class="form-control" placeholder="Email">
-								<span class = "invalid-feedback" id = "emailError"> *Please enter a valid email address. </span>
-							</div>
-
-							<div class="form-group">
 								<input type="password" name="password" id="passwordReg" class="form-control" placeholder="Password">
 								<span class = "invalid-feedback" id = "pssError"> *Please enter a password length of 8 - 20, at least one number, one lower case and one upper case letter. </span>
 							</div>
@@ -751,11 +747,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			var username=document.registerForm.username;
 			var password=document.registerForm.password;
 			var fullName=document.registerForm.fullName;
-			var email=document.registerForm.email;
-            var passwordCfm=document.registerForm.passwordCfm;
-			
-			var atPos=email.value.indexOf("@");
-			var dotPos=email.value.lastIndexOf(".");      
+            var passwordCfm=document.registerForm.passwordCfm;   
 			
 			var errorMsg = 0;
 
@@ -773,14 +765,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			}
 			else {
 				document.getElementById("fullNameError").style.display = "none";
-			}
-			
-			if (email.value == "" || atPos < 1 || dotPos < atPos+2 || dotPos+2 >= email.value.length){
-				document.getElementById("emailError").style.display = "block";
-				errorMsg++;  
-			}
-			else {
-				document.getElementById("emailError").style.display = "none";
 			}
 			
 			if(password.value == "" || !password.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,20}$/)){
@@ -804,8 +788,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					username.focus();
 				} else if(fullName.value == "") {
 					fullName.focus();
-				} else if (email.value == "" || atPos < 1 || dotPos < atPos+2 || dotPos+2 >= email.value.length) {
-					email.focus();
 				} else if(password.value == "" || !password.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,20}$/)) {
 					password.focus();
 				} else {

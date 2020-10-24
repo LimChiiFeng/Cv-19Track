@@ -124,12 +124,72 @@ padding:1.5rem 0 0 2rem;
       display:block;
     }
 
+.viewTester .notester {
+  height:auto;
+  padding:10px 0px;
+  text-align:center;
+  /**border: 2px dashed rgb(56, 65, 59);*/
+}
+  .viewTester .notester img{
+    margin-left:auto;
+    margin-right:auto;
+    /**display:block;**/
+  }
+  .viewTester .notester button{
+    background-image:linear-gradient(to right, #fff, #1995c8 11%, #00bbce);
+    background-position:-100% 0%;
+    background-size: 200% 100%;
+    transition:background 0.5s;
+    border-radius: 5px;
+    border:0;
+    color: #fff;
+    font-size:36px;
+    
+  }
+    .viewTester .notester button img{
+      position:relative;
+      height:10vh;
+    }
+    .viewTester .notester button .btnchgimg{
+      display:none;
+    }
+      .viewTester .notester button:hover{
+        background-position:100% 0%;
+      }
+      .viewTester .notester button:focus{
+        outline:0;
+        border:0;
+      }
+      .viewTester .notester button:hover img{
+        display:none;
+      }
+      .viewTester .notester button:hover .btnchgimg{
+        display:inline;
+      }
+
 .testKit {
   padding:1rem 1rem 0 auto;
 }
   .testKit .table-top{
-    float:right;
+    width:100%;
+    display:inline-flex;
+    padding-left:0;
   }
+
+  /* .testKit .table-top .fa, .fas{
+    font-weight: bold;
+  } */
+
+  .testKit .table-top #searchKit{
+    width: 55%;
+    margin-left:0;
+    height: fit-content;
+  }
+  /* .testKit .table-top #searchKit::placeholder{
+    font-weight:normal;
+  } */
+
+  
   .testKit .btn-outline{
     border:none;
     float:right;
@@ -150,10 +210,15 @@ padding:1.5rem 0 0 2rem;
       .testKit .thead:hover{
         background-color:rgb(136, 136, 136);
       }
+
+    /* .testKit table tr .table_action{
+      width:fit-content;
+    } */
     .testKit table tr .btn-link{
-      margin-left:-10rem;
+      padding:0;
+      /* margin-left:-10rem;
       text-decoration: none; 
-      font-style: italic;
+      font-style: italic; */
     }
     .testKit table tr .btn-link:hover, .testKit table tr .btn-link:active{
       color: #eea236;
@@ -168,11 +233,91 @@ padding:1.5rem 0 0 2rem;
       padding-left:5%;
     }
     
-    .testKit table tr .table_stock{
+    .testKit table .thead .table_stock{
       width:20%;
       text-align: center;
     }
 
+    .testKit table .tbody .table_stock{
+      width:10%;
+      text-align: center;
+      padding-right:-1rem;
+    }
+
+    .testKit table .tbody .table_action{
+      width:10%;
+    }
+
+.test{
+  padding:1rem;
+}
+  .test .test_action .btn-primary{
+    margin-bottom:1.5rem;
+  }
+
+  .test .patient-table tr td .btn-link{
+    text-decoration: none;
+  }
+
+  .test .patient-table .thead:hover{
+    background:none;
+  }
+
+  .test .test-table {
+    padding:1rem;
+    
+  }
+    .test .patient-table .patientTest td{
+      padding: 1.5rem 0 1.5rem 1rem;
+    }
+      .test .patient-table .patientTest .btn-light{
+        background:none;
+          padding: 0 1rem;
+          margin:auto;
+      }
+      .test .patient-table .patientTest i{
+        font-size:20px; 
+      }
+
+    .test .test-table .accordion .btn-link{
+      display:block;
+      width:100%;
+      margin:0;
+      text-decoration: none;
+      border: 1px solid #d8d8d8;
+      text-align: start;
+    }
+
+    
+      .test .test-table .panel-default > .panel-heading{
+        background:#7db1ff;
+      }
+
+      .test .test-table .panel-heading a {
+       background:none;
+       color:#ffffff;
+       /* color:red; */
+      }
+        .test .test-table .panel-heading a.collapsed{
+          border:none;
+        }
+        .test .test-table .panel-body p{
+          margin:auto 0 1rem 0;
+        }
+          .test .test-table .panel-body .btn-success{
+            float:right;
+          }
+
+.recordTest .modal-content .nav-tabs > li, .nav-pills > li {
+  float:none;
+  display:inline-block;
+  *display:inline;
+   zoom:1;
+}
+
+  .recordTest .modal-content .nav-tabs, .nav-pills {
+    text-align:center;
+  }
 
 .colorlib-nav {
   width: 100%;
@@ -613,7 +758,7 @@ padding:1.5rem 0 0 2rem;
 
 .panel-heading a.collapsed {
   background: #fff;
-  border: 1px solid #e6e6e6 !important;
+  /* border: 1px solid #e6e6e6 !important; */
   color: #333333; }
 
 .panel-body {
@@ -1500,7 +1645,7 @@ padding:1.5rem 0 0 2rem;
         #colorlib-footer .colorlib-footer-links li a:hover {
           text-decoration: none;
           color: #fff; }
-  #colorlib-footer .colorlib-widget {
+  /* #colorlib-footer .colorlib-widget {
     margin-bottom: 30px; }
     @media screen and (max-width: 768px) {
       #colorlib-footer .colorlib-widget {
@@ -1554,7 +1699,7 @@ padding:1.5rem 0 0 2rem;
     box-shadow: none; }
   #colorlib-footer .form-group #btn-submit {
     background: #3c97e8;
-    color: #fff; }
+    color: #fff; } */
   #colorlib-footer .copyright {
     background: rgba(0, 0, 0, 0.2);
     padding: 2em; }

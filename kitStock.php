@@ -121,6 +121,7 @@ else if(isset($_POST['updateStock'])){
 
 	<!-- Modernizr JS -->
 	<script src="js/modernizr-2.6.2.min.js"></script>
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -185,13 +186,14 @@ else if(isset($_POST['updateStock'])){
     <div class="testKit">
 		<div class="container">
 			<div class="table-top col-md-6">
+				<input type="text" class="form-control" name="searchKit" id="searchKit" placeholder="Search">
 				<button class="btn btn-outline" data-toggle="modal" data-target="#newKit" id="addNewKit"> + Add Test Kit </button>
 			</div>
 
 			<table class="table table-hover" id="testKitData">
 				<tr class="thead">
 					<th class='table_testName'> Test name  </th>
-					<th class='table_stock'> Stock </th>
+					<th class='table_stock' colspan="2"> Stock </th>
 				</tr>
 				
 				<?php
@@ -205,9 +207,11 @@ else if(isset($_POST['updateStock'])){
 						$availableStock = $row['availableStock'];
 				?>
 				
-				<tr>
+				<tr class="tbody">
 					<td class='table_testName'> <?php echo $testName ?> </td>
-					<td class='table_stock'> <?php echo $availableStock ?><button class='btn btn-link' data-toggle='modal' data-target='#addStock<?php echo $kitID?>'> Add </button>
+					<td class='table_stock'> <?php echo $availableStock ?> </td>
+					<td class='table_action'>
+					<button class='btn btn-link' data-toggle='modal' data-target='#addStock<?php echo $kitID?>'><i class="fas fa-edit"></i></button>
 					</td> 
 				</tr>
 
@@ -281,64 +285,7 @@ else if(isset($_POST['updateStock'])){
 		</div>
 	</div>
 
-	<script>
-    function addKitForm()
-		{
-			var testName=document.newKitForm.testName;
-			var stockNum=document.newKitForm.stockNum;
-
-			var errorMsg = 0;
-
-			if(testName.value == "") {
-                document.getElementById('testNameError').style.display = 'block';
-                return false;
-				errorMsg++;
-            } else {
-				document.getElementById('testNameError').style.display = 'none';
-			}
-
-			if(stockNum.value =="" ) {
-				document.getElementById('stockNumError').style.display = 'block';
-				return false;
-				errorMsg++;
-			} else if (stockNum.value < 1){
-				document.getElementById('stockNumError').style.display = 'block';
-				return false;
-			} else {
-				document.getElementById('stockNumError').style.display = 'none';
-			}
-
-			if(errorMsg != 0){
-				if(testName.value == "") {
-					testName.focus();
-				} else if(stockNum.value =="" || stockNum.value < 1) {
-					stockNum.focus();
-				} 
-				return false;
-			} 
-		}
-
-		function addStockForm(stockFormID)
-		{
-			var stockNo=document.getElementById(stockFormID).elements['stockNo'];
-
-
-			if(stockNo.value =="" ) {
-				document.getElementById('stockNoErr_'+stockFormID).style.display = 'block';
-				return false;
-				
-			} else if (stockNo.value < 1){
-				document.getElementById('stockNoErr_'+stockFormID).style.display = 'block';
-				return false;
-			} else {
-				document.getElementById('stockNoErr_'+stockFormID).style.display = 'none';
-			}
-
-			// alert('this is id'+stockFormID);
-		}
-    
 	
-	</script>
 
 	<footer id="colorlib-footer" role="contentinfo">
 		<div class="row copyright">
@@ -382,6 +329,73 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="js/sticky-kit.min.js"></script>
 	<!-- Main -->
 	<script src="js/main.js"></script>
+
+	<script>
+    function addKitForm()
+		{
+			var testName=document.newKitForm.testName;
+			var stockNum=document.newKitForm.stockNum;
+
+			var errorMsg = 0;
+
+			if(testName.value == "") {
+                document.getElementById('testNameError').style.display = 'block';
+				errorMsg++;
+            } else {
+				document.getElementById('testNameError').style.display = 'none';
+			}
+
+			if(stockNum.value =="" ) {
+				document.getElementById('stockNumError').style.display = 'block';
+				errorMsg++;
+			} else if (stockNum.value < 1){
+				document.getElementById('stockNumError').style.display = 'block';
+				errorMsg++;
+			} else {
+				document.getElementById('stockNumError').style.display = 'none';
+			}
+
+			if(errorMsg != 0){
+				if(testName.value == "") {
+					testName.focus();
+				} else if(stockNum.value =="" || stockNum.value < 1) {
+					stockNum.focus();
+				} 
+				return false;
+			} 
+
+			return true;
+		}
+
+		function addStockForm(stockFormID)
+		{
+			var stockNo=document.getElementById(stockFormID).elements['stockNo'];
+
+
+			if(stockNo.value =="" ) {
+				document.getElementById('stockNoErr_'+stockFormID).style.display = 'block';
+				return false;
+				
+			} else if (stockNo.value < 1){
+				document.getElementById('stockNoErr_'+stockFormID).style.display = 'block';
+				return false;
+			} else {
+				document.getElementById('stockNoErr_'+stockFormID).style.display = 'none';
+			}
+
+			// alert('this is id'+stockFormID);
+		}
+    
+		$(document).ready(function(){
+			$("#searchKit").on("keyup", function() {
+				var value = $(this).val().toLowerCase();
+				$("#testKitData .tbody").filter(function() {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});	
+	
+	</script>
 
 	</body>
 </html>

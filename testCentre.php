@@ -222,7 +222,7 @@ else if($centreNum==1){
                             <div class="description">
                                 <ul style="list-style:none; margin-left:-4rem;">
                                     <li class="list-item">Number of Tester: <?php echo $count_tester ?> <a class="btn btn-link" href="viewTester.php"> View </a> </li>
-                                    <li class="list-item">Total Kit Stock: <?php echo $count_kitstock ?> <a class="btn btn-link" href="kitStock.php"> Details </a></li>
+                                    <li class="list-item">Test Kit Stock: <?php echo $count_kitstock ?> <a class="btn btn-link" href="kitStock.php"> Details </a></li>
                                 </ul>
                                 <!-- The number of tester will be increase and automatically count when a tester is recorded to this test centre -->
                                 <!-- There are two way to show the tester information, 1. click the view button 2. click the view tester link in the navigation -->

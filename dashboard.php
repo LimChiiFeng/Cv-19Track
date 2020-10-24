@@ -3,6 +3,8 @@ include("dbcon.php");
 session_start();
 
 $centreNum = 0;
+$position = $_SESSION['position'];
+$name=$_SESSION['name'];
 
 if(!isset($_SESSION['username'])){
 	echo "<script>alert('Please login first!')</script>";
@@ -14,16 +16,25 @@ if(!isset($_SESSION['username'])){
 	$statement = $dbcon->prepare($checkCentre);
 	$statement->execute();
 	if($row = $statement->fetch()){
-		echo "<script>alert('$username, your test centre have been approved, please complete the centre registration!');</script>";
+		echo "<script>alert('Dear $name, your test centre have been approved, please complete the centre registration!');</script>";
 	}
 	else{
 		// echo "<script>alert('Welcome, $username, you haven\'t a test centre');</script>";
 		$centreNum++;
 	}
 
-if($centreNum==0){
-	echo "<style> .function{display:none;} </style>";
+if($position == "Tester"){
+	echo "<style> #test_centre, #test_kit, #view_tester{display:none;} </style>";
+} else if($position == "Manager"){
+	if($centreNum==0){
+		echo "<style> .function{display:none;} </style>";
+	} else {
+		echo "<style> #test_patient {display:none;} </style>";
+	}
+	
 }
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -70,6 +81,7 @@ if($centreNum==0){
 
 	<!-- Modernizr JS -->
 	<script src="js/modernizr-2.6.2.min.js"></script>
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -92,7 +104,7 @@ if($centreNum==0){
 									<div id="colorlib-logo"><a href="index.html">Cv-19<span>Track</span></a></div>
 								</div>
 								<div class="col-md-2">
-									<span> <?php echo "$username,$centreNum"; ?> <span>
+									<span> <?php echo "$username,$centreNum,$position"; ?> <span>
 								</div>
 							</div>
 						</div>
@@ -104,14 +116,14 @@ if($centreNum==0){
 					<div class="row">
 						<div class="col-md-8">
 							<div class="menu-1">
-								<ul>
-									<li class="nav-item active" ><a href="dashboard.php">Dashboard</a></li>
-									<li><a href="testCentre.php">Test Centre</a></li>
-									<li class="nav-item">
-										<a class="function" href="viewTester.php" >View Tester</a>
-									</li>
-									<li class="nav-item"><a class="function" href="kitStock.php">Kit Stock</a></li>
-									<li class="nav-item"><a class="function" href="report.php">Report</a></li>
+								<ul class="managerNav" name="managerNav" id="managerNav">
+									<li class="nav-item active" id="dashboard"><a href="dashboard.php">Dashboard</a></li>
+									<li class="nav-item" id="test_centre"><a href="testCentre.php">Test Centre</a></li>
+									<li class="nav-item" id="view_tester"><a class="function" href="viewTester.php" >View Tester</a></li>
+									<li class="nav-item" id="test_kit"><a class="function" href="kitStock.php">Kit Stock</a></li>
+									<li class="nav-item" id="test_patient"><a class="function" href="test_list.php">Test</a></li>
+									<li class="nav-item" id="test_report"><a class="function" href="report.php">Report</a></li>
+									<!-- <li class="nav-item" id="test"><a class="function" href="test_list_2.php">Test 2</a></li> -->
 								</ul>
 							</div>
 						</div>
@@ -155,7 +167,7 @@ if($centreNum==0){
 	<div id="colorlib-services">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4 animate-box">
+				<div class="col-md-4 animate-box" id="test_centre">
 					<div class="services-2">
 						<span class="icon">
 							<i class="flaticon-hospital"></i>
@@ -174,28 +186,51 @@ if($centreNum==0){
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 animate-box function">
+				<div class="col-md-4 animate-box function" id="view_tester">
 					<div class="services-2">
 						<span class="icon">
 							<i class="flaticon-healthy-1"></i>
 						</span>
 						<div class="desc">
-							<h3><a href="#">View Tester</a></h3>
+							<h3><a href="viewTester.php">View Tester</a></h3>
 							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 animate-box function">
+				<div class="col-md-4 animate-box function" id="test_kit">
 					<div class="services-2">
 						<span class="icon">
 							<i class="flaticon-stethoscope"></i>
 						</span>
 						<div class="desc">
-							<h3><a href="#">Report</a></h3>
+							<h3><a href="kitStock.php">Test Kit Stock</a></h3>
 							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
 						</div>
 					</div>
 				</div>
+				<div class="col-md-4 animate-box function" id="test_patient">
+					<div class="services-2">
+						<span class="icon">
+							<i class="flaticon-medical-1"></i>
+						</span>
+						<div class="desc">
+							<h3><a href="test_list.php">Record New Test</a></h3>
+							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 animate-box function" id="test_report">
+					<div class="services-2">
+						<span class="icon">
+							<i class="far fa-file-alt"></i>
+						</span>
+						<div class="desc">
+							<h3><a href="#">Test Report</a></h3>
+							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>
